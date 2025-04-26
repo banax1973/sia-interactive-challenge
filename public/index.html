@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Sync & Clima</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <section class="channel" id="channel1">
+      <video id="video" loop muted>
+        <source src="videos/sample.mp4" type="video/mp4" />
+        Your browser does not support HTML5 video.
+      </video>
+      <div class="controls">
+        <button id="playBtn">Play</button>
+        <button id="pauseBtn">Pause</button>
+      </div>
+    </section>
+    <section class="channel" id="channel2">
+      <div id="tempDisplay">Cargando...</div>
+    </section>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/client.js"></script>
+</body>
+</html>
