@@ -42,22 +42,22 @@ video {
 
 .controls {
   position: absolute;
-  bottom: 10px;
+  bottom: 2%;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 10px;
+  gap: clamp(8px, 2vw, 16px);
 }
 
 .controls button {
   background: transparent;
   border: none;
-  padding: 18px;
+  padding: clamp(4px, 1vw, 18px);
   cursor: pointer;
 }
 
 .controls button i {
-  font-size: 32px;
+  font-size: clamp(16px, 4vw, 32px);
   color: #007bff;
 }
 
@@ -66,5 +66,5 @@ video {
 }
 
 #tempDisplay {
-  font-size: 2rem;
+  font-size: clamp(18px, 4vw, 48px);
 }
