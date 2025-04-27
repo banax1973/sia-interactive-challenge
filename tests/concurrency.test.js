@@ -1,29 +1,33 @@
 import { io as Client } from 'socket.io-client';
 import { server, temperatureInterval, io } from '../server.js';
 
+const CLIENTS_AMOUNT = 2;
+
 describe('Concurrency (socket.io)', () => {
   let client1, client2;
-  const port = process.env.SERVER_PORT || 3000;
-  const url = `http://localhost:${port}`;
-
-  beforeAll((done) => {
+  
+  beforeAll(async () => {
+    await new Promise(res => server.listen(0, res));
+    const port = server.address().port;
+    const url = `http://localhost:${port}`;
+  
     client1 = Client(url);
     client2 = Client(url);
-
-    let connected = 0;
-    [client1, client2].forEach(c => {
-      c.on('connect', () => {
-        if (++connected === 2) done();
-      });
+    // wait to all clients´ sockets are connected
+    await new Promise(res => {
+      let c = 0;
+      [client1, client2].forEach(sock =>
+        sock.on('connect', () => ++c === CLIENTS_AMOUNT && res())
+      );
     });
   });
 
-  afterAll((done) => {
+  afterAll(async () => {
     client1.disconnect();
     client2.disconnect();
     clearInterval(temperatureInterval);
-    io.close(); 
-    server.close(done);
+    await new Promise(res => io.close(res));
+    await new Promise(res => server.close(res));
   });
 
   afterEach(() => {

@@ -48,8 +48,8 @@ const sendTemperature = async () => {
 
 const temperatureInterval = setInterval(sendTemperature, TEMPERATURE_INTERVAL);
 
-server.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  server.listen(PORT, () => console.log(`Servidor escuchando en http://localhost:${PORT}`));
+}
 
 export { app, server, temperatureInterval, sendTemperature, io };

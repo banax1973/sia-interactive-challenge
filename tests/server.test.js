@@ -1,12 +1,13 @@
 import request from 'supertest';
 import fetch from 'node-fetch';
-import { app, server, temperatureInterval, sendTemperature, io } from '../server.js';
+import { app, temperatureInterval, sendTemperature, io } from '../server.js';
 
+const TEMP_MOCK = 22;
 jest.mock('node-fetch');
 
-afterAll((done) => {
+afterAll(() => {
   clearInterval(temperatureInterval);
-  server.close(done);
+  io.close();
 });
 
 describe('GET /', () => {
@@ -43,13 +44,12 @@ describe('Static assets', () => {
 
 describe('sendTemperature', () => {
   it('should emit temperature-update when current_weather present', async () => {
-    const mockTemp = 22;
-    fetch.mockResolvedValue({ json: async () => ({ current_weather: { temperature: mockTemp } }) });
+    fetch.mockResolvedValue({ json: async () => ({ current_weather: { temperature: TEMP_MOCK } }) });
     const emitSpy = jest.spyOn(io, 'emit');
 
     await sendTemperature();
 
-    expect(emitSpy).toHaveBeenCalledWith('temperature-update', `${mockTemp} °C`);
+    expect(emitSpy).toHaveBeenCalledWith('temperature-update', `${TEMP_MOCK} °C`);
     emitSpy.mockRestore();
   });
 
