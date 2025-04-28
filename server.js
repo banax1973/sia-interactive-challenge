@@ -3,15 +3,11 @@ import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
 import fetch from 'node-fetch';
+import { PORT, LATITUDE, LONGITUDE, TEMPERATURE_INTERVAL } from './config.js';
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-
-const PORT = process.env.SERVER_PORT || 3000;
-const LATITUDE = process.env.LATITUDE;
-const LONGITUDE = process.env.LONGITUDE;
-const TEMPERATURE_INTERVAL = process.env.TEMPERATURE_INTERVAL;
 
 let activeUsers = 0;
 
