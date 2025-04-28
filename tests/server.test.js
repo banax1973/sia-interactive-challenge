@@ -42,7 +42,7 @@ describe('Static assets', () => {
   });
 });
 
-describe('sendTemperature', () => {
+describe('Send temperature', () => {
   it('should emit temperature-update when current_weather present', async () => {
     fetch.mockResolvedValue({ json: async () => ({ current_weather: { temperature: TEMP_MOCK } }) });
     const emitSpy = jest.spyOn(io, 'emit');

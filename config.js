@@ -1,7 +1,9 @@
 import dotenv from 'dotenv';
 import Joi from 'joi';
 
-dotenv.config();
+if (process.env.NODE_ENV !== 'test') {
+  dotenv.config();
+}
 
 const SERVER_PORT_DEFAULT = 3000;
 const TEMPERATURE_INTERVAL_DEFAULT = 30000

@@ -8,6 +8,7 @@
         "build": "babel public/js --out-dir public/js-compiled --presets @babel/preset-env",
         "start": "node server.js",
         "test": "cross-env NODE_ENV=test jest",
+        "test:coverage": "cross-env NODE_ENV=test jest --coverage",
         "cypress:open": "cypress open",
         "cypress:run": "cypress run"
     },

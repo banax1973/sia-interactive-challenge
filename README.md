@@ -29,7 +29,9 @@ npm run build
 npm start
 
 # Ejecutar tests unitarios
-npm test
+npm run test
+# Ejecutar cobertura de tests
+npm run test:coverage
 
 # Ejecutar tests E2E
 Nota: si no esta corriendo ya, se debe correr primeramente el server para poder ejecutar tests E2E (npm start).
