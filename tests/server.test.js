@@ -1,8 +1,11 @@
 import request from 'supertest';
 import fetch from 'node-fetch';
-import { app, temperatureInterval, sendTemperature, io } from '../server.js';
+import { app, temperatureInterval, io } from '../server.js';
+import { sendTemperature } from '../services/temperatureService.js';
 
 const TEMP_MOCK = 22;
+const LATITUDE_MOCK = 1; 
+const LONGITUDE_MOCK = 2;
 jest.mock('node-fetch');
 
 afterAll(() => {
@@ -47,7 +50,7 @@ describe('Send temperature', () => {
     fetch.mockResolvedValue({ json: async () => ({ current_weather: { temperature: TEMP_MOCK } }) });
     const emitSpy = jest.spyOn(io, 'emit');
 
-    await sendTemperature();
+    await sendTemperature(io, LATITUDE_MOCK, LONGITUDE_MOCK);
 
     expect(emitSpy).toHaveBeenCalledWith('temperature-update', `${TEMP_MOCK} °C`);
     emitSpy.mockRestore();
@@ -57,7 +60,7 @@ describe('Send temperature', () => {
     fetch.mockResolvedValue({ json: async () => ({}) });
     const emitSpy = jest.spyOn(io, 'emit');
 
-    await sendTemperature();
+    await sendTemperature(io, LATITUDE_MOCK, LONGITUDE_MOCK);
 
     expect(emitSpy).not.toHaveBeenCalledWith('temperature-update', expect.anything());
     emitSpy.mockRestore();

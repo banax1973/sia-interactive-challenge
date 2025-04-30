@@ -2,8 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
-import fetch from 'node-fetch';
-import { PORT, LATITUDE, LONGITUDE, TEMPERATURE_INTERVAL } from './config.js';
+import { PORT,TEMPERATURE_INTERVAL, LATITUDE, LONGITUDE } from './config.js';
+import { sendTemperature } from './services/temperatureService.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -26,26 +26,14 @@ io.on('connection', (socket) => {
     console.log(`Cliente desconectado: ${socket.id}. (razón: ${reason}). (usuarios totales: ${activeUsers})`);
   });
 
-  sendTemperature();
+  sendTemperature(io, LATITUDE, LONGITUDE);
 });
 
-const sendTemperature = async () => {
-  try {
-    const resp = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&current_weather=true`);
-    const data = await resp.json();
-    if (data.current_weather && data.current_weather.temperature !== undefined) {
-      const temp = `${data.current_weather.temperature} °C`;
-      io.emit('temperature-update', temp);
-    }
-  } catch (err) {
-    console.error('Error al obtener temperatura:', err);
-  }
-}
-
-const temperatureInterval = setInterval(sendTemperature, TEMPERATURE_INTERVAL);
+const temperatureCallback = () => sendTemperature(io, LATITUDE, LONGITUDE);
+const temperatureInterval = setInterval(temperatureCallback, TEMPERATURE_INTERVAL);
 
 if (process.env.NODE_ENV !== 'test') {
   server.listen(PORT, () => console.log(`Servidor escuchando en http://localhost:${PORT}`));
 }
 
-export { app, server, temperatureInterval, sendTemperature, io };
+export { app, server, temperatureInterval, io };
