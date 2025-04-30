@@ -1,5 +1,5 @@
 import { io as Client } from 'socket.io-client';
-import { server, temperatureInterval, io } from '../server.js';
+import { server, shutdown } from '../src/app/server.js';
 
 const CLIENTS_AMOUNT = 2;
 
@@ -25,9 +25,7 @@ describe('Concurrency (socket.io)', () => {
   afterAll(async () => {
     client1.disconnect();
     client2.disconnect();
-    clearInterval(temperatureInterval);
-    await new Promise(res => io.close(res));
-    await new Promise(res => server.close(res));
+    await shutdown();
   });
 
   afterEach(() => {

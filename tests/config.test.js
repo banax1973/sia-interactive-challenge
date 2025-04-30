@@ -10,7 +10,7 @@ describe('Config validation', () => {
       process.env = OLD_ENV;
     });
   
-    it('loads config when required env vars are set', async () => {
+    test('loads config when required env vars are set', async () => {
         process.env.NODE_ENV = 'test';
         process.env.LATITUDE = '1';
         process.env.LONGITUDE = '2';
@@ -22,7 +22,7 @@ describe('Config validation', () => {
         expect(TEMPERATURE_INTERVAL).toBeDefined();
     });
 
-    it('throws error when required env missing', async () => {
+    test('throws error when required env missing', async () => {
       process.env.NODE_ENV = 'test';
       await expect(import('../config.js'))
         .rejects
